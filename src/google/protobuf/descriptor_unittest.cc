@@ -1212,12 +1212,26 @@ class EnumDescriptorTest : public testing::Test {
     AddEnumValue(enum2_proto, "FOO", 1);
     AddEnumValue(enum2_proto, "BAZ", 3);
 
+    // TestEnumScoped
+    FileDescriptorProto baz_file;
+    baz_file.set_name("baz.proto");
+
+    EnumDescriptorProto* enum3_proto = AddEnum(&baz_file, "TestEnumScoped");
+    EnumOptions *options = enum3_proto->mutable_options();
+    options->set_scoped(true);
+
+    AddEnumValue(enum3_proto, "FOO", 0);
+    AddEnumValue(enum3_proto, "BAZ", 1);
+
     // Build the descriptors and get the pointers.
     foo_file_ = pool_.BuildFile(foo_file);
     ASSERT_TRUE(foo_file_ != NULL);
 
     bar_file_ = pool_.BuildFile(bar_file);
     ASSERT_TRUE(bar_file_ != NULL);
+
+    baz_file_ = pool_.BuildFile(baz_file);
+    ASSERT_TRUE(baz_file_ != NULL);
 
     ASSERT_EQ(1, foo_file_->enum_type_count());
     enum_ = foo_file_->enum_type(0);
@@ -1232,21 +1246,33 @@ class EnumDescriptorTest : public testing::Test {
     ASSERT_EQ(2, enum2_->value_count());
     foo2_ = enum2_->value(0);
     baz2_ = enum2_->value(1);
+
+    ASSERT_EQ(1, baz_file_->enum_type_count());
+    enum3_ = baz_file_->enum_type(0);
+
+    ASSERT_EQ(2, enum3_->value_count());
+    baz_foo_ = enum3_->value(0);
+    baz_baz_ = enum3_->value(1);
   }
 
   DescriptorPool pool_;
 
   const FileDescriptor* foo_file_;
   const FileDescriptor* bar_file_;
+  const FileDescriptor* baz_file_;
 
   const EnumDescriptor* enum_;
   const EnumDescriptor* enum2_;
+  const EnumDescriptor* enum3_;
 
   const EnumValueDescriptor* foo_;
   const EnumValueDescriptor* bar_;
 
   const EnumValueDescriptor* foo2_;
   const EnumValueDescriptor* baz2_;
+
+  const EnumValueDescriptor* baz_foo_;
+  const EnumValueDescriptor* baz_baz_;
 };
 
 TEST_F(EnumDescriptorTest, Name) {
@@ -1275,6 +1301,8 @@ TEST_F(EnumDescriptorTest, FindValueByName) {
   EXPECT_EQ(bar_ , enum_ ->FindValueByName("BAR"));
   EXPECT_EQ(foo2_, enum2_->FindValueByName("FOO"));
   EXPECT_EQ(baz2_, enum2_->FindValueByName("BAZ"));
+  EXPECT_EQ(baz_foo_, enum3_->FindValueByName("FOO"));
+  EXPECT_EQ(baz_baz_, enum3_->FindValueByName("BAZ"));
 
   EXPECT_TRUE(enum_ ->FindValueByName("NO_SUCH_VALUE") == NULL);
   EXPECT_TRUE(enum_ ->FindValueByName("BAZ"          ) == NULL);
@@ -1302,6 +1330,8 @@ TEST_F(EnumDescriptorTest, ValueFullName) {
   EXPECT_EQ("BAR", bar_->full_name());
   EXPECT_EQ("corge.grault.FOO", foo2_->full_name());
   EXPECT_EQ("corge.grault.BAZ", baz2_->full_name());
+  EXPECT_EQ("TestEnumScoped.FOO", baz_foo_->full_name());
+  EXPECT_EQ("TestEnumScoped.BAZ", baz_baz_->full_name());
 }
 
 TEST_F(EnumDescriptorTest, ValueIndex) {
