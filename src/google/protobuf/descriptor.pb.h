@@ -2710,6 +2710,13 @@ class LIBPROTOBUF_EXPORT EnumOptions : public ::google::protobuf::Message /* @@p
   bool deprecated() const;
   void set_deprecated(bool value);
 
+  // optional bool scoped = 4 [default = false];
+  bool has_scoped() const;
+  void clear_scoped();
+  static const int kScopedFieldNumber = 4;
+  bool scoped() const;
+  void set_scoped(bool value);
+
   // repeated .google.protobuf.UninterpretedOption uninterpreted_option = 999;
   int uninterpreted_option_size() const;
   void clear_uninterpreted_option();
@@ -2729,6 +2736,8 @@ class LIBPROTOBUF_EXPORT EnumOptions : public ::google::protobuf::Message /* @@p
   inline void clear_has_allow_alias();
   inline void set_has_deprecated();
   inline void clear_has_deprecated();
+  inline void set_has_scoped();
+  inline void clear_has_scoped();
 
   ::google::protobuf::internal::ExtensionSet _extensions_;
 
@@ -2738,6 +2747,7 @@ class LIBPROTOBUF_EXPORT EnumOptions : public ::google::protobuf::Message /* @@p
   ::google::protobuf::RepeatedPtrField< ::google::protobuf::UninterpretedOption > uninterpreted_option_;
   bool allow_alias_;
   bool deprecated_;
+  bool scoped_;
   friend void LIBPROTOBUF_EXPORT protobuf_AddDesc_google_2fprotobuf_2fdescriptor_2eproto();
   friend void protobuf_AssignDesc_google_2fprotobuf_2fdescriptor_2eproto();
   friend void protobuf_ShutdownFile_google_2fprotobuf_2fdescriptor_2eproto();
@@ -6921,6 +6931,30 @@ inline void EnumOptions::set_deprecated(bool value) {
   set_has_deprecated();
   deprecated_ = value;
   // @@protoc_insertion_point(field_set:google.protobuf.EnumOptions.deprecated)
+}
+
+// optional bool scoped = 4 [default = false];
+inline bool EnumOptions::has_scoped() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void EnumOptions::set_has_scoped() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void EnumOptions::clear_has_scoped() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void EnumOptions::clear_scoped() {
+  scoped_ = false;
+  clear_has_scoped();
+}
+inline bool EnumOptions::scoped() const {
+  // @@protoc_insertion_point(field_get:google.protobuf.EnumOptions.scoped)
+  return scoped_;
+}
+inline void EnumOptions::set_scoped(bool value) {
+  set_has_scoped();
+  scoped_ = value;
+  // @@protoc_insertion_point(field_set:google.protobuf.EnumOptions.scoped)
 }
 
 // repeated .google.protobuf.UninterpretedOption uninterpreted_option = 999;

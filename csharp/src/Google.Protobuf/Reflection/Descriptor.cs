@@ -111,35 +111,36 @@ namespace Google.Protobuf.Reflection {
             "CUpTX1NUUklORxABEg0KCUpTX05VTUJFUhACKgkI6AcQgICAgAIiXgoMT25l",
             "b2ZPcHRpb25zEkMKFHVuaW50ZXJwcmV0ZWRfb3B0aW9uGOcHIAMoCzIkLmdv",
             "b2dsZS5wcm90b2J1Zi5VbmludGVycHJldGVkT3B0aW9uKgkI6AcQgICAgAIi",
-            "jQEKC0VudW1PcHRpb25zEhMKC2FsbG93X2FsaWFzGAIgASgIEhkKCmRlcHJl",
-            "Y2F0ZWQYAyABKAg6BWZhbHNlEkMKFHVuaW50ZXJwcmV0ZWRfb3B0aW9uGOcH",
-            "IAMoCzIkLmdvb2dsZS5wcm90b2J1Zi5VbmludGVycHJldGVkT3B0aW9uKgkI",
-            "6AcQgICAgAIifQoQRW51bVZhbHVlT3B0aW9ucxIZCgpkZXByZWNhdGVkGAEg",
-            "ASgIOgVmYWxzZRJDChR1bmludGVycHJldGVkX29wdGlvbhjnByADKAsyJC5n",
-            "b29nbGUucHJvdG9idWYuVW5pbnRlcnByZXRlZE9wdGlvbioJCOgHEICAgIAC",
-            "InsKDlNlcnZpY2VPcHRpb25zEhkKCmRlcHJlY2F0ZWQYISABKAg6BWZhbHNl",
-            "EkMKFHVuaW50ZXJwcmV0ZWRfb3B0aW9uGOcHIAMoCzIkLmdvb2dsZS5wcm90",
-            "b2J1Zi5VbmludGVycHJldGVkT3B0aW9uKgkI6AcQgICAgAIiegoNTWV0aG9k",
-            "T3B0aW9ucxIZCgpkZXByZWNhdGVkGCEgASgIOgVmYWxzZRJDChR1bmludGVy",
-            "cHJldGVkX29wdGlvbhjnByADKAsyJC5nb29nbGUucHJvdG9idWYuVW5pbnRl",
-            "cnByZXRlZE9wdGlvbioJCOgHEICAgIACIp4CChNVbmludGVycHJldGVkT3B0",
-            "aW9uEjsKBG5hbWUYAiADKAsyLS5nb29nbGUucHJvdG9idWYuVW5pbnRlcnBy",
-            "ZXRlZE9wdGlvbi5OYW1lUGFydBIYChBpZGVudGlmaWVyX3ZhbHVlGAMgASgJ",
-            "EhoKEnBvc2l0aXZlX2ludF92YWx1ZRgEIAEoBBIaChJuZWdhdGl2ZV9pbnRf",
-            "dmFsdWUYBSABKAMSFAoMZG91YmxlX3ZhbHVlGAYgASgBEhQKDHN0cmluZ192",
-            "YWx1ZRgHIAEoDBIXCg9hZ2dyZWdhdGVfdmFsdWUYCCABKAkaMwoITmFtZVBh",
-            "cnQSEQoJbmFtZV9wYXJ0GAEgAigJEhQKDGlzX2V4dGVuc2lvbhgCIAIoCCLV",
-            "AQoOU291cmNlQ29kZUluZm8SOgoIbG9jYXRpb24YASADKAsyKC5nb29nbGUu",
-            "cHJvdG9idWYuU291cmNlQ29kZUluZm8uTG9jYXRpb24ahgEKCExvY2F0aW9u",
-            "EhAKBHBhdGgYASADKAVCAhABEhAKBHNwYW4YAiADKAVCAhABEhgKEGxlYWRp",
-            "bmdfY29tbWVudHMYAyABKAkSGQoRdHJhaWxpbmdfY29tbWVudHMYBCABKAkS",
-            "IQoZbGVhZGluZ19kZXRhY2hlZF9jb21tZW50cxgGIAMoCSKnAQoRR2VuZXJh",
-            "dGVkQ29kZUluZm8SQQoKYW5ub3RhdGlvbhgBIAMoCzItLmdvb2dsZS5wcm90",
-            "b2J1Zi5HZW5lcmF0ZWRDb2RlSW5mby5Bbm5vdGF0aW9uGk8KCkFubm90YXRp",
-            "b24SEAoEcGF0aBgBIAMoBUICEAESEwoLc291cmNlX2ZpbGUYAiABKAkSDQoF",
-            "YmVnaW4YAyABKAUSCwoDZW5kGAQgASgFQlsKE2NvbS5nb29nbGUucHJvdG9i",
-            "dWZCEERlc2NyaXB0b3JQcm90b3NIAVoKZGVzY3JpcHRvcqABAaICA0dQQqoC",
-            "Gkdvb2dsZS5Qcm90b2J1Zi5SZWZsZWN0aW9u"));
+            "pAEKC0VudW1PcHRpb25zEhMKC2FsbG93X2FsaWFzGAIgASgIEhkKCmRlcHJl",
+            "Y2F0ZWQYAyABKAg6BWZhbHNlEhUKBnNjb3BlZBgEIAEoCDoFZmFsc2USQwoU",
+            "dW5pbnRlcnByZXRlZF9vcHRpb24Y5wcgAygLMiQuZ29vZ2xlLnByb3RvYnVm",
+            "LlVuaW50ZXJwcmV0ZWRPcHRpb24qCQjoBxCAgICAAiJ9ChBFbnVtVmFsdWVP",
+            "cHRpb25zEhkKCmRlcHJlY2F0ZWQYASABKAg6BWZhbHNlEkMKFHVuaW50ZXJw",
+            "cmV0ZWRfb3B0aW9uGOcHIAMoCzIkLmdvb2dsZS5wcm90b2J1Zi5VbmludGVy",
+            "cHJldGVkT3B0aW9uKgkI6AcQgICAgAIiewoOU2VydmljZU9wdGlvbnMSGQoK",
+            "ZGVwcmVjYXRlZBghIAEoCDoFZmFsc2USQwoUdW5pbnRlcnByZXRlZF9vcHRp",
+            "b24Y5wcgAygLMiQuZ29vZ2xlLnByb3RvYnVmLlVuaW50ZXJwcmV0ZWRPcHRp",
+            "b24qCQjoBxCAgICAAiJ6Cg1NZXRob2RPcHRpb25zEhkKCmRlcHJlY2F0ZWQY",
+            "ISABKAg6BWZhbHNlEkMKFHVuaW50ZXJwcmV0ZWRfb3B0aW9uGOcHIAMoCzIk",
+            "Lmdvb2dsZS5wcm90b2J1Zi5VbmludGVycHJldGVkT3B0aW9uKgkI6AcQgICA",
+            "gAIingIKE1VuaW50ZXJwcmV0ZWRPcHRpb24SOwoEbmFtZRgCIAMoCzItLmdv",
+            "b2dsZS5wcm90b2J1Zi5VbmludGVycHJldGVkT3B0aW9uLk5hbWVQYXJ0EhgK",
+            "EGlkZW50aWZpZXJfdmFsdWUYAyABKAkSGgoScG9zaXRpdmVfaW50X3ZhbHVl",
+            "GAQgASgEEhoKEm5lZ2F0aXZlX2ludF92YWx1ZRgFIAEoAxIUCgxkb3VibGVf",
+            "dmFsdWUYBiABKAESFAoMc3RyaW5nX3ZhbHVlGAcgASgMEhcKD2FnZ3JlZ2F0",
+            "ZV92YWx1ZRgIIAEoCRozCghOYW1lUGFydBIRCgluYW1lX3BhcnQYASACKAkS",
+            "FAoMaXNfZXh0ZW5zaW9uGAIgAigIItUBCg5Tb3VyY2VDb2RlSW5mbxI6Cghs",
+            "b2NhdGlvbhgBIAMoCzIoLmdvb2dsZS5wcm90b2J1Zi5Tb3VyY2VDb2RlSW5m",
+            "by5Mb2NhdGlvbhqGAQoITG9jYXRpb24SEAoEcGF0aBgBIAMoBUICEAESEAoE",
+            "c3BhbhgCIAMoBUICEAESGAoQbGVhZGluZ19jb21tZW50cxgDIAEoCRIZChF0",
+            "cmFpbGluZ19jb21tZW50cxgEIAEoCRIhChlsZWFkaW5nX2RldGFjaGVkX2Nv",
+            "bW1lbnRzGAYgAygJIqcBChFHZW5lcmF0ZWRDb2RlSW5mbxJBCgphbm5vdGF0",
+            "aW9uGAEgAygLMi0uZ29vZ2xlLnByb3RvYnVmLkdlbmVyYXRlZENvZGVJbmZv",
+            "LkFubm90YXRpb24aTwoKQW5ub3RhdGlvbhIQCgRwYXRoGAEgAygFQgIQARIT",
+            "Cgtzb3VyY2VfZmlsZRgCIAEoCRINCgViZWdpbhgDIAEoBRILCgNlbmQYBCAB",
+            "KAVCWwoTY29tLmdvb2dsZS5wcm90b2J1ZkIQRGVzY3JpcHRvclByb3Rvc0gB",
+            "WgpkZXNjcmlwdG9yoAEBogIDR1BCqgIaR29vZ2xlLlByb3RvYnVmLlJlZmxl",
+            "Y3Rpb24="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -157,7 +158,7 @@ namespace Google.Protobuf.Reflection {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Reflection.MessageOptions), global::Google.Protobuf.Reflection.MessageOptions.Parser, new[]{ "MessageSetWireFormat", "NoStandardDescriptorAccessor", "Deprecated", "MapEntry", "UninterpretedOption" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Reflection.FieldOptions), global::Google.Protobuf.Reflection.FieldOptions.Parser, new[]{ "Ctype", "Packed", "Jstype", "Lazy", "Deprecated", "Weak", "UninterpretedOption" }, null, new[]{ typeof(global::Google.Protobuf.Reflection.FieldOptions.Types.CType), typeof(global::Google.Protobuf.Reflection.FieldOptions.Types.JSType) }, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Reflection.OneofOptions), global::Google.Protobuf.Reflection.OneofOptions.Parser, new[]{ "UninterpretedOption" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Reflection.EnumOptions), global::Google.Protobuf.Reflection.EnumOptions.Parser, new[]{ "AllowAlias", "Deprecated", "UninterpretedOption" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Reflection.EnumOptions), global::Google.Protobuf.Reflection.EnumOptions.Parser, new[]{ "AllowAlias", "Deprecated", "Scoped", "UninterpretedOption" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Reflection.EnumValueOptions), global::Google.Protobuf.Reflection.EnumValueOptions.Parser, new[]{ "Deprecated", "UninterpretedOption" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Reflection.ServiceOptions), global::Google.Protobuf.Reflection.ServiceOptions.Parser, new[]{ "Deprecated", "UninterpretedOption" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Reflection.MethodOptions), global::Google.Protobuf.Reflection.MethodOptions.Parser, new[]{ "Deprecated", "UninterpretedOption" }, null, null, null),
@@ -4158,6 +4159,7 @@ namespace Google.Protobuf.Reflection {
     public EnumOptions(EnumOptions other) : this() {
       allowAlias_ = other.allowAlias_;
       deprecated_ = other.deprecated_;
+      scoped_ = other.scoped_;
       uninterpretedOption_ = other.uninterpretedOption_.Clone();
     }
 
@@ -4198,6 +4200,22 @@ namespace Google.Protobuf.Reflection {
       }
     }
 
+    /// <summary>Field number for the "scoped" field.</summary>
+    public const int ScopedFieldNumber = 4;
+    private bool scoped_;
+    /// <summary>
+    ///  Set this option to allow enum values to be scoped to their parent enum
+    ///  automatically by prefixing the enum value with the enum parent's name
+    ///  for all languages that require it (C++)
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Scoped {
+      get { return scoped_; }
+      set {
+        scoped_ = value;
+      }
+    }
+
     /// <summary>Field number for the "uninterpreted_option" field.</summary>
     public const int UninterpretedOptionFieldNumber = 999;
     private static readonly pb::FieldCodec<global::Google.Protobuf.Reflection.UninterpretedOption> _repeated_uninterpretedOption_codec
@@ -4226,6 +4244,7 @@ namespace Google.Protobuf.Reflection {
       }
       if (AllowAlias != other.AllowAlias) return false;
       if (Deprecated != other.Deprecated) return false;
+      if (Scoped != other.Scoped) return false;
       if(!uninterpretedOption_.Equals(other.uninterpretedOption_)) return false;
       return true;
     }
@@ -4235,6 +4254,7 @@ namespace Google.Protobuf.Reflection {
       int hash = 1;
       if (AllowAlias != false) hash ^= AllowAlias.GetHashCode();
       if (Deprecated != false) hash ^= Deprecated.GetHashCode();
+      if (Scoped != false) hash ^= Scoped.GetHashCode();
       hash ^= uninterpretedOption_.GetHashCode();
       return hash;
     }
@@ -4254,6 +4274,10 @@ namespace Google.Protobuf.Reflection {
         output.WriteRawTag(24);
         output.WriteBool(Deprecated);
       }
+      if (Scoped != false) {
+        output.WriteRawTag(32);
+        output.WriteBool(Scoped);
+      }
       uninterpretedOption_.WriteTo(output, _repeated_uninterpretedOption_codec);
     }
 
@@ -4264,6 +4288,9 @@ namespace Google.Protobuf.Reflection {
         size += 1 + 1;
       }
       if (Deprecated != false) {
+        size += 1 + 1;
+      }
+      if (Scoped != false) {
         size += 1 + 1;
       }
       size += uninterpretedOption_.CalculateSize(_repeated_uninterpretedOption_codec);
@@ -4280,6 +4307,9 @@ namespace Google.Protobuf.Reflection {
       }
       if (other.Deprecated != false) {
         Deprecated = other.Deprecated;
+      }
+      if (other.Scoped != false) {
+        Scoped = other.Scoped;
       }
       uninterpretedOption_.Add(other.uninterpretedOption_);
     }
@@ -4298,6 +4328,10 @@ namespace Google.Protobuf.Reflection {
           }
           case 24: {
             Deprecated = input.ReadBool();
+            break;
+          }
+          case 32: {
+            Scoped = input.ReadBool();
             break;
           }
           case 7994: {

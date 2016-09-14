@@ -560,6 +560,11 @@ message EnumOptions {
   // is a formalization for deprecating enums.
   optional bool deprecated = 3 [default=false];
 
+  // Set this option to allow enum values to be scoped to their parent enum
+  // automatically by prefixing the enum value with the enum parent's name
+  // for all languages that require it (C++)
+  optional bool scoped = 4 [default=false];
+
   // The parser stores options it doesn't recognize here. See above.
   repeated UninterpretedOption uninterpreted_option = 999;
 
