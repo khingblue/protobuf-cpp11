@@ -197,6 +197,15 @@ string FieldName(const FieldDescriptor* field) {
 
 string EnumValueName(const EnumValueDescriptor* enum_value) {
   string result = enum_value->name();
+  const EnumOptions &options = enum_value->type()->options();
+  // Handle enums with option scoped in a C98-compatible manner
+  // TODO: if C++11 support is added by option or by default, convert to
+  //       remove this and use enum class
+  if (options.has_scoped() && options.scoped()) {
+    string prefix = ToUpper(enum_value->type()->name());
+    prefix.append("_").append(result);
+    result = prefix;
+  }
   if (kKeywords.count(result) > 0) {
     result.append("_");
   }

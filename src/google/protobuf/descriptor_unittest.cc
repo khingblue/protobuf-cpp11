@@ -3376,7 +3376,7 @@ TEST_F(ValidationErrorTest, EnumValueAlreadyDefinedInParent) {
     "foo.proto: FOO: NAME: Note that enum values use C++ scoping rules, "
       "meaning that enum values are siblings of their type, not children of "
       "it.  Therefore, \"FOO\" must be unique within the global scope, not "
-      "just within \"Bar\".\n");
+      "just within \"Bar\". Use option scoped = true to modify this behavior\n");
 }
 
 TEST_F(ValidationErrorTest, EnumValueAlreadyDefinedInParentNonGlobal) {
@@ -3390,7 +3390,7 @@ TEST_F(ValidationErrorTest, EnumValueAlreadyDefinedInParentNonGlobal) {
     "foo.proto: pkg.FOO: NAME: Note that enum values use C++ scoping rules, "
       "meaning that enum values are siblings of their type, not children of "
       "it.  Therefore, \"FOO\" must be unique within \"pkg\", not just within "
-      "\"Bar\".\n");
+      "\"Bar\". Use option scoped = true to modify this behavior\n");
 }
 
 TEST_F(ValidationErrorTest, MissingName) {

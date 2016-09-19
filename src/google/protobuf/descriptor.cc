@@ -49,6 +49,7 @@
 #include <google/protobuf/descriptor.pb.h>
 #include <google/protobuf/dynamic_message.h>
 #include <google/protobuf/generated_message_util.h>
+#include <google/protobuf/reflection.h>
 #include <google/protobuf/text_format.h>
 #include <google/protobuf/unknown_field_set.h>
 #include <google/protobuf/wire_format.h>
@@ -1248,8 +1249,8 @@ const EnumDescriptor* DescriptorPool::FindEnumTypeByName(
 }
 
 const EnumValueDescriptor* DescriptorPool::FindEnumValueByName(
-    const string& name) const {
-  Symbol result = tables_->FindByNameHelper(this, name);
+  const string& enum_full_name) const {
+  Symbol result = tables_->FindByNameHelper(this, enum_full_name);
   return (result.type == Symbol::ENUM_VALUE) ?
     result.enum_value_descriptor : NULL;
 }
@@ -2945,6 +2946,13 @@ class DescriptorBuilder {
   void AllocateOptions(const FileOptions& orig_options,
                        FileDescriptor* descriptor);
 
+  class OptionInterpreter;
+
+  template<class DescriptorT> void InterpretNonExtensionOptions(
+      const typename DescriptorT::OptionsType& orig_options,
+      DescriptorT* descriptor,
+      OptionInterpreter &interpereter);
+
   // Implementation for AllocateOptions(). Don't call this directly.
   template<class DescriptorT> void AllocateOptionsImpl(
       const string& name_scope,
@@ -3030,7 +3038,9 @@ class DescriptorBuilder {
     // Interprets the uninterpreted options in the specified Options message.
     // On error, calls AddError() on the underlying builder and returns false.
     // Otherwise returns true.
-    bool InterpretOptions(OptionsToInterpret* options_to_interpret);
+    // if skipExtensions is true then extension options will be skipped and
+    // added to the resulting option's uninterpreted options
+    bool InterpretOptions(OptionsToInterpret* options_to_interpret, bool deferExtensions);
 
     class AggregateOptionFinder;
 
@@ -3703,6 +3713,22 @@ template<class DescriptorT> void DescriptorBuilder::AllocateOptions(
                       orig_options, descriptor);
 }
 
+template<class DescriptorT> void DescriptorBuilder::InterpretNonExtensionOptions(
+  const typename DescriptorT::OptionsType& orig_options,
+  DescriptorT* descriptor,
+  OptionInterpreter &interpereter) {
+  typename DescriptorT::OptionsType* const dummy = NULL;
+  typename DescriptorT::OptionsType* options = tables_->AllocateMessage(dummy);
+  options->ParseFromString(orig_options.SerializeAsString());
+  OptionsToInterpret to_interpret(descriptor->full_name(),
+    descriptor->full_name(), &orig_options, options);
+  interpereter.InterpretOptions(&to_interpret, true);
+  if (options->uninterpreted_option_size() > 0) {
+    options_to_interpret_.push_back(to_interpret);
+  }
+  descriptor->options_ = options;
+}
+
 // We specialize for FileDescriptor.
 void DescriptorBuilder::AllocateOptions(const FileOptions& orig_options,
                                         FileDescriptor* descriptor) {
@@ -4023,7 +4049,7 @@ const FileDescriptor* DescriptorBuilder::BuildFileImpl(
     for (vector<OptionsToInterpret>::iterator iter =
              options_to_interpret_.begin();
          iter != options_to_interpret_.end(); ++iter) {
-      option_interpreter.InterpretOptions(&(*iter));
+      option_interpreter.InterpretOptions(&(*iter), false);
     }
     options_to_interpret_.clear();
   }
@@ -4566,14 +4592,20 @@ void DescriptorBuilder::BuildEnum(const EnumDescriptorProto& proto,
              "Enums must contain at least one value.");
   }
 
-  BUILD_ARRAY(proto, result, value, BuildEnumValue, result);
-
   // Copy options.
   if (!proto.has_options()) {
     result->options_ = NULL;  // Will set to default_instance later.
   } else {
-    AllocateOptions(proto.options(), result);
+    // Enums have an "option scoped" which changes the way naming is scoped
+    // And so we need to know if that option is present at this point
+    // So we will interpret all options on this enum (except extensions which
+    // will be interpreted later)
+    // TODO: should we be sharing this interpreter instead?
+    OptionInterpreter interpereter(this);
+    InterpretNonExtensionOptions<EnumDescriptor>(proto.options(), result, interpereter);
   }
+
+  BUILD_ARRAY(proto, result, value, BuildEnumValue, result);
 
   AddSymbol(result->full_name(), parent, result->name(),
             proto, Symbol(result));
@@ -4588,9 +4620,17 @@ void DescriptorBuilder::BuildEnumValue(const EnumValueDescriptorProto& proto,
 
   // Note:  full_name for enum values is a sibling to the parent's name, not a
   //   child of it.
+  //   unless option scoped = true;
+  bool scoped = parent->options_ ? parent->options_->scoped() : false;
   string* full_name = tables_->AllocateString(*parent->full_name_);
-  full_name->resize(full_name->size() - parent->name_->size());
-  full_name->append(*result->name_);
+  if (scoped) {
+    full_name->append(1, '.');
+    full_name->append(proto.name());
+  }
+  else {
+    full_name->resize(full_name->size() - parent->name_->size());
+    full_name->append(*result->name_);
+  }
   result->full_name_ = full_name;
 
   ValidateSymbolName(proto.name(), *full_name, proto);
@@ -4602,21 +4642,29 @@ void DescriptorBuilder::BuildEnumValue(const EnumValueDescriptorProto& proto,
     AllocateOptions(proto.options(), result);
   }
 
-  // Again, enum values are weird because we makes them appear as siblings
-  // of the enum type instead of children of it.  So, we use
-  // parent->containing_type() as the value's parent.
-  bool added_to_outer_scope =
-    AddSymbol(result->full_name(), parent->containing_type(), result->name(),
-              proto, Symbol(result));
+  bool added_to_outer_scope, added_to_inner_scope;
+  if (scoped) {
+    added_to_inner_scope =
+      AddSymbol(result->full_name(), parent, result->name(),
+        proto, Symbol(result));
+  }
+  else {
+    // Again, enum values are weird because we makes them appear as siblings
+    // of the enum type instead of children of it.  So, we use
+    // parent->containing_type() as the value's parent.
+    added_to_outer_scope =
+      AddSymbol(result->full_name(), parent->containing_type(), result->name(),
+        proto, Symbol(result));
 
-  // However, we also want to be able to search for values within a single
-  // enum type, so we add it as a child of the enum type itself, too.
-  // Note:  This could fail, but if it does, the error has already been
-  //   reported by the above AddSymbol() call, so we ignore the return code.
-  bool added_to_inner_scope =
-    file_tables_->AddAliasUnderParent(parent, result->name(), Symbol(result));
+    // However, we also want to be able to search for values within a single
+    // enum type, so we add it as a child of the enum type itself, too.
+    // Note:  This could fail, but if it does, the error has already been
+    //   reported by the above AddSymbol() call, so we ignore the return code.
+    added_to_inner_scope =
+      file_tables_->AddAliasUnderParent(parent, result->name(), Symbol(result));
+  }
 
-  if (added_to_inner_scope && !added_to_outer_scope) {
+  if (!scoped && added_to_inner_scope && !added_to_outer_scope) {
     // This value did not conflict with any values defined in the same enum,
     // but it did conflict with some other symbol defined in the enum type's
     // scope.  Let's print an additional error to explain this.
@@ -4635,10 +4683,11 @@ void DescriptorBuilder::BuildEnumValue(const EnumValueDescriptorProto& proto,
 
     AddError(result->full_name(), proto,
              DescriptorPool::ErrorCollector::NAME,
-             "Note that enum values use C++ scoping rules, meaning that "
-             "enum values are siblings of their type, not children of it.  "
-             "Therefore, \"" + result->name() + "\" must be unique within "
-             + outer_scope + ", not just within \"" + parent->name() + "\".");
+            "Note that enum values use C++ scoping rules, meaning that "
+            "enum values are siblings of their type, not children of it.  "
+            "Therefore, \"" + result->name() + "\" must be unique within "
+            + outer_scope + ", not just within \"" + parent->name() + "\"."
+            " Use option scoped = true to modify this behavior");
   }
 
   // An enum is allowed to define two numbers that refer to the same value.
@@ -4942,9 +4991,10 @@ void DescriptorBuilder::CrossLinkField(
           // We can't just use field->enum_type()->FindValueByName() here
           // because that locks the pool's mutex, which we have already locked
           // at this point.
+          string default_value_name = field->enum_type()->full_name() + "." + proto.default_value();
           Symbol default_value =
             LookupSymbolNoPlaceholder(proto.default_value(),
-                                      field->enum_type()->full_name());
+                                      default_value_name);
 
           if (default_value.type == Symbol::ENUM_VALUE &&
               default_value.enum_value_descriptor->type() ==
@@ -5539,8 +5589,16 @@ DescriptorBuilder::OptionInterpreter::OptionInterpreter(
 DescriptorBuilder::OptionInterpreter::~OptionInterpreter() {
 }
 
+bool UninterpretedOptionIsExtension(const UninterpretedOption* uninterpreted_option) {
+  for (int i = 0; i < uninterpreted_option->name_size(); ++i) {
+    if (uninterpreted_option->name(i).is_extension())
+      return true;
+  }
+  return false;
+}
+
 bool DescriptorBuilder::OptionInterpreter::InterpretOptions(
-    OptionsToInterpret* options_to_interpret) {
+    OptionsToInterpret* options_to_interpret, bool deferExtensions) {
   // Note that these may be in different pools, so we can't use the same
   // descriptor and reflection objects on both.
   Message* options = options_to_interpret->options;
@@ -5566,10 +5624,22 @@ bool DescriptorBuilder::OptionInterpreter::InterpretOptions(
 
   const int num_uninterpreted_options = original_options->GetReflection()->
       FieldSize(*original_options, original_uninterpreted_options_field);
+  // Create a holder for any extension options we may defer
+  MutableRepeatedFieldRef<Message> defered = options->GetReflection()->
+      GetMutableRepeatedFieldRef<Message>(options, uninterpreted_options_field);
   for (int i = 0; i < num_uninterpreted_options; ++i) {
-    uninterpreted_option_ = down_cast<const UninterpretedOption*>(
+    const Message* uninterpreted_option_msg =
         &original_options->GetReflection()->GetRepeatedMessage(
-            *original_options, original_uninterpreted_options_field, i));
+            *original_options, original_uninterpreted_options_field, i);
+    uninterpreted_option_ = down_cast<const UninterpretedOption*>(
+      uninterpreted_option_msg);
+    if (deferExtensions &&
+      UninterpretedOptionIsExtension(uninterpreted_option_)) {
+      // Extensions are deferred and this is an extension
+      // add to the deferred list and skip
+      defered.Add(*uninterpreted_option_msg);
+      continue;
+    }
     if (!InterpretSingleOption(options)) {
       // Error already added by InterpretSingleOption().
       failed = true;
