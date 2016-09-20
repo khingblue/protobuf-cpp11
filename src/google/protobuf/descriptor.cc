@@ -1173,9 +1173,11 @@ void DescriptorPool::InternalAddGeneratedFile(
 //   there's nothing more important to do (read: never).
 
 const FileDescriptor* DescriptorPool::FindFileByName(const string& name) const {
-  MutexLockMaybe lock(mutex_);
-  tables_->known_bad_symbols_.clear();
-  tables_->known_bad_files_.clear();
+  {
+    MutexLockMaybe lock(mutex_);
+    tables_->known_bad_symbols_.clear();
+    tables_->known_bad_files_.clear();
+  }
   const FileDescriptor* result = tables_->FindFile(name);
   if (result != NULL) return result;
   if (underlay_ != NULL) {
