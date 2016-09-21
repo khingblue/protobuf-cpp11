@@ -1,77 +1,66 @@
-Protocol Buffers - Google's data interchange format
-===================================================
+## Introduction
 
-[![Build Status](https://travis-ci.org/google/protobuf.svg?branch=master)](https://travis-ci.org/google/protobuf) [![Build status](https://ci.appveyor.com/api/projects/status/73ctee6ua4w2ruin?svg=true)](https://ci.appveyor.com/project/protobuf/protobuf) [![Build Status](https://grpc-testing.appspot.com/buildStatus/icon?job=protobuf_branch)](https://grpc-testing.appspot.com/job/protobuf_branch)
+Protobuf-cpp11 adds C++11/C++14 features to [Google's Protocol Buffers](https://github.com/google/protobuf).
 
-Copyright 2008 Google Inc.
+Protocol Buffers is widely used in Google internally and many projects are still using C++98 compiler, so at current state it can be a slow process for Google to switch to C++11 for Protocol Buffers.
 
-https://developers.google.com/protocol-buffers/
+This repository is to enable C++11 features for people who already using C++11 compiler in their projects.
 
-Overview
---------
+## Installation and Usage
+All new features are added by introducing new options without breaking backward compatibility, so [installation](https://github.com/google/protobuf/blob/master/src/README.md) and [usage](https://developers.google.com/protocol-buffers/) are completely the same as Google's Protocol Buffers.
 
-Protocol Buffers (a.k.a., protobuf) are Google's language-neutral,
-platform-neutral, extensible mechanism for serializing structured data. You
-can find [protobuf's documentation on the Google Developers site](https://developers.google.com/protocol-buffers/).
+_Note that C++11 compiler is not mandatory. These new features will only be activated by options explicitly, so you will only need C++11 compiler when enabling C++11 features._
 
-This README file contains protobuf installation instructions. To install
-protobuf, you need to install the protocol compiler (used to compile .proto
-files) and the protobuf runtime for your chosen programming language.
+## Features
 
-Protocol Compiler Installation
-------------------------------
+* [scoped enum](#scoped-enum)
 
-The protocol compiler is written in C++. If you are using C++, please follow
-the [C++ Installation Instructions](src/README.md) to install protoc along
-with the C++ runtime.
+### scoped enum
+(like enum class in C++11)
 
-For non-C++ users, the simplest way to install the protocol compiler is to
-download a pre-built binary from our release page:
+_**option name**_: scoped
 
-  [https://github.com/google/protobuf/releases](https://github.com/google/protobuf/releases)
+By default enum is not scoped, for example compiling following message will generate an error:
 
-In the downloads section of each release, you can find pre-built binaries in
-zip packages: protoc-$VERSION-$PLATFORM.zip. It contains the protoc binary
-as well as a set of standard .proto files distributed along with protobuf.
+    message Counter {
+      enum Status {
+        start = 0;
+        stop = 1;
+      }
+      required int32 stop = 1;  // error: duplicated name defined in enum Status
+    }
 
-If you are looking for an old version that is not available in the release
-page, check out the maven repo here:
+Thanks to [Warren Falk](https://github.com/warrenfalk), now it is supported by a new option "scoped" in enum:
 
-  [http://repo1.maven.org/maven2/com/google/protobuf/protoc/](http://repo1.maven.org/maven2/com/google/protobuf/protoc/)
+    message Counter {
+      enum Status {
+        option scoped = true;
+        start = 0;
+        stop = 1;
+      }
+      required int32 stop = 1;
+    }
 
-These pre-built binaries are only provided for released versions. If you want
-to use the github master version at HEAD, or you need to modify protobuf code,
-or you are using C++, it's recommended to build your own protoc binary from
-source.
+And you can define same name in different enums with different values, like enum class in C++11:
 
-If you would like to build protoc binary from source, see the [C++ Installation
-Instructions](src/README.md).
+    message Counter {
+      enum Status {
+        option scoped = true;
+        start = 0;
+        stop = 1;
+      }
+      enum Action {
+        option scoped = true;
+        stop = 42;
+      }
+      required int32 stop = 1;
+      optional Status status = 2 [default = stop];  // by default status will set to 1
+      optional Action action = 3 [default = stop];  // by default action will set to 42
+    }
 
-Protobuf Runtime Installation
------------------------------
+Note: This option doesn't require C++11 support, it just scopes the enum value names to the enum instead of the parent of the enum, here is [detailed discussion](https://github.com/google/protobuf/issues/1079).
 
-Protobuf supports several different programming languages. For each programming
-language, you can find instructions in the corresponding source directory about
-how to install protobuf runtime for that specific language:
+## Todo List
 
-| Language                             | Source                                                |
-|--------------------------------------|-------------------------------------------------------|
-| C++ (include C++ runtime and protoc) | [src](src)                                            |
-| Java                                 | [java](java)                                          |
-| Python                               | [python](python)                                      |
-| Objective-C                          | [objectivec](objectivec)                              |
-| C#                                   | [csharp](csharp)                                      |
-| JavaNano                             | [javanano](javanano)                                  |
-| JavaScript                           | [js](js)                                              |
-| Ruby                                 | [ruby](ruby)                                          |
-| Go                                   | [golang/protobuf](https://github.com/golang/protobuf) |
-| PHP                                  | [php](php)                                            |
-
-
-Usage
------
-
-The complete documentation for Protocol Buffers is available via the
-web at:
-
-    https://developers.google.com/protocol-buffers/
+* move contructor - [discussion link](https://groups.google.com/forum/#!topic/protobuf/QdHPjwmUgXw)
+* final class
