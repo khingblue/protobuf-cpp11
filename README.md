@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/khingblue/protobuf-cpp11.svg?branch=master)](https://travis-ci.org/khingblue/protobuf-cpp11)
+
 ## Introduction
 
 Protobuf-cpp11 adds C++11/C++14 features to [Google's Protocol Buffers](https://github.com/google/protobuf).
